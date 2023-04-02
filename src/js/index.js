@@ -15,29 +15,12 @@ const refs = {
 refs.input.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
 function onInput(e) {
-  refs.countryCard.innerHTML = '';
-  refs.countryList.innerHTML = '';
-
   const searchQuery = e.target.value.trim();
 
+  clearMarkup();
+
   if (searchQuery) {
-    fetchCountries(searchQuery)
-      .then(res => {
-        if (!res.ok) throw new Error(`Response status: ${res.status}`);
-        return res.json();
-      })
-      .then(result => {
-        if (result.length > 10) {
-          Notify.info("Too many matches found. Please enter a more specific name.");
-          return;
-        }
-        if (result.length > 2 && result.length <= 10) {
-          refs.countryList.innerHTML = prepareCountryListMarkup(result);
-          return;
-        }
-        refs.countryCard.innerHTML = prepareCountryCardMarkup(result);
-      })
-      .catch(handleError)
+    fetchCountries(searchQuery).then(handleResult).catch(handleError)
   }
 }
 
@@ -52,16 +35,30 @@ function handleError(err) {
   clearMarkup();
 }
 
-function prepareCountryListMarkup(countries) {
-  return countries.map(country => {
-    return `<li class="country-list__item">
-    <img class="country-list__img" src="${country.flags.svg}" width="24" height="16" alt="Flag of ${country.name.official}">
-    <p class="country-list__text">${country.name.common}</p>
-  </li>`;
-  }).join(' ');
+function handleResult(result) {
+  if (result.length > 10) {
+    Notify.info("Too many matches found. Please enter a more specific name.");
+    return;
+  }
+  if (result.length > 2 && result.length <= 10) {
+    updateListMarkup(result);
+    return;
+  }
+  updateCardMarkup(result[0])
 }
 
-function prepareCountryCardMarkup([country]) {
+function prepareListItemMarkup(country) {
+    return `<li class="country-list__item">
+    <img class="country-list__img" src="${country.flags.svg}" width="24" height="16" alt="Flag of ${country.name.common}">
+    <p class="country-list__text">${country.name.official}</p>
+  </li>`;
+}
+
+function updateListMarkup(countries) {
+  refs.countryList.innerHTML = countries.map(prepareListItemMarkup).join('');
+}
+
+function prepareCardMarkup(country) {
   return `<header class="country-card__header">
     <img class="country-card__img" src="${country.flags.svg}" width="33" height="22" alt="Flag of ${country.name.official}">
     <h2 class="country-card__title">${country.name.common}</h2>
@@ -74,4 +71,8 @@ function prepareCountryCardMarkup([country]) {
     <dt class="info__term">Languages</dt>
     <dd class="info__desc">${Object.values(country.languages).join(', ')}</dd><br>
   </dl>`;
+}
+
+function updateCardMarkup(country) {
+  refs.countryCard.innerHTML = prepareCardMarkup(country);
 }
