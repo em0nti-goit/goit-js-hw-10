@@ -37,11 +37,19 @@ function onInput(e) {
         }
         refs.countryCard.innerHTML = prepareCountryCardMarkup(result);
       })
-      .catch(err => {
-        console.error(err);
-        Notify.failure("Oops, there is no country with that name");
-      })
+      .catch(handleError)
   }
+}
+
+function clearMarkup() {
+  refs.countryList.innerHTML = '';
+  refs.countryCard.innerHTML = '';
+}
+
+function handleError(err) {
+  console.error(err);
+  Notify.failure("Oops, there is no country with that name");
+  clearMarkup();
 }
 
 function prepareCountryListMarkup(countries) {
