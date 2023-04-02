@@ -1,3 +1,6 @@
+const DOMAIN = 'https://restcountries.com';
+const PATH = '/v3.1/name/';
+
 export function fetchCountries(name) {
   const fields = [
     , 'name'
@@ -7,8 +10,7 @@ export function fetchCountries(name) {
     , 'languages'
   ];
   const params = fields.join();
-  const url = `https://restcountries.com/v3.1/name/${name}?fields=${params}`;
+  const url = `${DOMAIN}${PATH}${name}?fields=${params}`;
 
   return fetch(url);
-
 }
