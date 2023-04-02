@@ -2,6 +2,7 @@ import '../css/styles.css';
 import { fetchCountries } from "./fetchCountries";
 import debounce from "lodash.debounce";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 
 const DEBOUNCE_DELAY = 300;
 
@@ -20,7 +21,10 @@ function onInput(e) {
   clearMarkup();
 
   if (searchQuery) {
-    fetchCountries(searchQuery).then(handleResult).catch(handleError)
+    Loading.standard('Searching...', {
+      backgroundColor: 'rgba(0,0,0,0.1)',
+    });
+    fetchCountries(searchQuery).then(handleResult).catch(handleError).finally(() => Loading.remove(500));
   }
 }
 
