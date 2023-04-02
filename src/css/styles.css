@@ -32,6 +32,17 @@ body {
 }
 
 /* country-list block */
+.country-list {
+  transition: opacity 0.4s, visibility 0.4s;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.country-list.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
 .country-list__item {
   display: flex;
   align-items: center;
@@ -41,7 +52,20 @@ body {
   margin-right: 10px;
 }
 
+
+
 /* country-card block */
+
+.country-card {
+  transition: opacity 0.4s, visibility 0.4s;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.country-card.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
 
 .country-card__header {
   display: flex;

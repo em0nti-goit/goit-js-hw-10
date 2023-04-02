@@ -19,10 +19,13 @@ function onInput(e) {
   const searchQuery = e.target.value.trim();
 
   clearMarkup();
+  refs.countryList.classList.remove('is-visible');
+  refs.countryCard.classList.remove('is-visible');
 
   if (searchQuery) {
     Loading.standard('Searching...', {
       backgroundColor: 'rgba(0,0,0,0.1)',
+      messageColor: '#2b3b42',
     });
     fetchCountries(searchQuery).then(handleResult).catch(handleError).finally(() => Loading.remove(500));
   }
@@ -60,6 +63,7 @@ function prepareListItemMarkup(country) {
 
 function updateListMarkup(countries) {
   refs.countryList.innerHTML = countries.map(prepareListItemMarkup).join('');
+  refs.countryList.classList.add('is-visible');
 }
 
 function prepareCardMarkup(country) {
@@ -79,4 +83,5 @@ function prepareCardMarkup(country) {
 
 function updateCardMarkup(country) {
   refs.countryCard.innerHTML = prepareCardMarkup(country);
+  refs.countryCard.classList.add('is-visible');
 }
