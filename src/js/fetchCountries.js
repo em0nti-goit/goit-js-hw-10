@@ -12,5 +12,8 @@ export function fetchCountries(name) {
   const params = fields.join();
   const url = `${DOMAIN}${PATH}${name}?fields=${params}`;
 
-  return fetch(url);
+  return fetch(url).then(res => {
+    if (!res.ok) throw new Error(`Response status: ${res.status}`);
+    return res.json();
+  });
 }
